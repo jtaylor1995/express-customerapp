@@ -42,14 +42,11 @@ app.use(expressValidator({
 app.get('/', function(req, res) {
 
 	db.users.find(function(err, docs) {
-		console.log(docs);
 		res.render('index', {
 			title: 'Customers',
 			users: docs
 		});
 	});
-
-
 });
 
 app.post('/users/add', function(req, res) {
@@ -81,7 +78,7 @@ app.post('/users/add', function(req, res) {
 			}
 		});
 
-		console.log('SUCCESS');
+		res.redirect('/')
 	}
 });
 
@@ -93,6 +90,53 @@ app.delete('/users/delete/:id', function(req, res) {
 		res.redirect('/')
 	})
 })
+
+app.get('/users/update/:id', function(req, res) {
+
+	db.users.findOne({_id: ObjectId(req.params.id)}, function(err, result) {
+		res.render('update', {
+			title: 'Update',
+			user: result
+		});
+	});
+});
+
+app.post('/update/:id', function(req, res) {
+
+	req.checkBody('first_name', 'First Name is required').notEmpty();
+	req.checkBody('last_name', 'Last Name is required').notEmpty();
+	req.checkBody('email', 'Email is required').notEmpty();
+
+	var errors = req.validationErrors();
+
+	if(errors) {
+		// Add error handling here
+		db.users.findOne({_id: ObjectId(req.params.id)}, function(err, result) {
+			res.render('update', {
+				title: 'Update',
+				user: result,
+				errors: errors
+			});
+		});
+	} else {
+		var updateData = {
+			first_name: req.body.first_name,
+			last_name: req.body.last_name,
+			email: req.body.email
+		}
+
+		// RIGHT THE UPDATE STATEMENT HERE
+		db.users.update({_id: ObjectId(req.params.id)}, updateData, function(err, raw) {
+    if (err) {
+      console.log(err);
+    }
+    console.log(raw);
+  	});
+		res.redirect('/')
+	}
+
+
+});
 
 app.listen(3000, function() {
 	console.log('Server started on 3000');
