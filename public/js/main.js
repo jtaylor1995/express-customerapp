@@ -1,5 +1,7 @@
 $(document).ready(function() {
 	$('.deleteUser').on('click', deleteUser);
+	$('#customerTable').dataTable();
+
 });
 
 function deleteUser(){
