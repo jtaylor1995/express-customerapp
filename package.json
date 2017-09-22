@@ -13,6 +13,8 @@
     "ejs": "^2.5.7",
     "express": "*",
     "express-validator": "^4.2.0",
-    "mongojs": "^2.4.1"
+    "mongojs": "^2.4.1",
+    "d3": "~3.5.6",
+    "jsdom": "~3.1.2"
   }
 }

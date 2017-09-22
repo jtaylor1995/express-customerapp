@@ -39,12 +39,16 @@ app.use(expressValidator({
 	}
 }));
 
+var fixtureData = require('./fixture_data.json');
+app.locals.barChartHelper = require('./bar_chart_helper');
+
 app.get('/', function(req, res) {
 
 	db.users.find(function(err, docs) {
 		res.render('index', {
 			title: 'Customers',
-			users: docs
+			users: docs,
+			fixtureData: fixtureData
 		});
 	});
 });
@@ -61,7 +65,8 @@ app.post('/users/add', function(req, res) {
 			res.render('index', {
 				title: 'Customers',
 				users: docs,
-				errors: errors
+				errors: errors,
+				fixtureData: fixtureData
 			});
 		});
 	} else {
